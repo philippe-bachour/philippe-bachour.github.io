@@ -21,7 +21,7 @@
 			</div>
 				<i id="login_button" class="material-icons login_icon">account_circle</i>
 		</div>
-		<div style="position:absolute;left:0;display:inline-block;"><img style="max-height: 50px" src="Images/Logo.jpeg"></div>
+		<div style="position:absolute;left:0;top:0;display:inline-block;"><img style="max-height: 50px" src="Images/Logo.jpeg"></div>
 	</div>
 	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 255;background:white;padding:0px;margin:0px;left:0px;">
 		<ul>
@@ -94,6 +94,48 @@
 		<div><a href="http://www.occluso.com/" class="">Site CNO National</a></div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	var last_known_scroll_position = 0;
+	var ticking = false;
+
+	function doSomething(scroll_pos)
+	{
+		if(scroll_pos > 115)
+		{
+			document.getElementById("topbar").style.position = 'fixed';
+			document.getElementById('head').style.marginBottom = '50px';
+		}
+		else
+		{
+			document.getElementById("topbar").style.position = 'static';
+			document.getElementById('head').style.marginBottom = '0px';
+		}
+	}
+
+	window.addEventListener('scroll', function(e) {
+	  last_known_scroll_position = window.scrollY;
+	  if (!ticking) {
+	    window.requestAnimationFrame(function() {
+	      doSomething(last_known_scroll_position);
+	      ticking = false;
+	    });
+	  }
+	  ticking = true;
+	});
+
+	document.getElementById('login_button').addEventListener('click', function(){
+		var t = document.getElementById('login_popup');
+		if (t.style.visibility == 'visible')
+		{
+			t.style.visibility = 'hidden';
+		}
+		else
+		{
+			t.style.visibility = 'visible';
+		}
+	}, false);
+</script>
 
 </body>
 </html>
