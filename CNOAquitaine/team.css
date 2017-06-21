@@ -1,0 +1,179 @@
+.team_bar
+{
+	//background-color: rgb(65, 65, 65);
+	text-align: center;
+	display:flex;
+	flex-direction: row;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+}
+.team_block
+{
+	position: relative;	
+	transition: 0.3s;
+	width:10%;
+}
+.team_pic
+{
+	clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+	height: 360px;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	background-position: center;
+	filter: grayscale(100%);
+	transition: 0.3s;
+	display:inline-block;
+	margin:0px;
+	padding:0px;
+	margin-left: -13px;
+	left:0;top:0;
+	position: relative;
+}
+.team_block:hover
+{
+	width:250px;
+}
+.team_block:hover .team_pic
+{
+	filter:grayscale(0%);
+	clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0 100%);
+	overflow:visible;
+}
+.team_data
+{
+	visibility: hidden;
+	width: 250px;
+	opacity: 0;
+	transition: 0.3s;
+}
+.team_block:hover .team_data
+{
+	visibility: visible;
+	opacity: 1;
+}
+.info
+{
+	#visibility:hidden;
+	#position: absolute;
+	#border:1px solid rgba(65, 65, 65, 0.9);
+	#background: rgb(230, 230, 230, 0.9);
+
+	min-height: 7rem;
+	display:inline-block;
+	bottom: -10%;
+	margin: auto;
+	padding: 10px;
+	text-align: center;
+	width: 100%;
+}
+.team_pic:hover .info
+{
+	z-index: 35;
+	visibility: visible;
+	text-align: center;
+}
+
+.team_bar:hover && .team_pic:not(:hover)
+{
+	width:5%;
+}
+.team_bar:hover > .team_pic:hover
+{
+	width:50%;
+}
+
+.name
+{
+	width: 100px;
+	min-height: 30px;
+}
+.name:before
+{
+	content: "G Cazals";
+}
+
+.gcazals
+{
+	background-image: url(Images/Usericons/gauthier_cazals.jpeg);
+}
+.edincau
+{
+	background-image: url(Images/Usericons/emmanuel_dincau.jpeg);
+}
+.crispal
+{
+	background-image: url(Images/Usericons/catherine_rispal.jpeg);
+}
+.cmoussier
+{
+	background-image: url(Images/Usericons/christophe_moussier.jpeg);
+}
+.dbrocard
+{
+	background-image: url(Images/Usericons/daniel_brocard.jpeg);
+}
+.msous
+{
+	background-image: url(Images/Usericons/marc_sous.jpeg);
+}
+.xcrauste
+{
+	background-image: url(Images/Usericons/xavier_crauste.jpeg);
+}
+.fpourrat
+{
+	background-image: url(Images/Usericons/franck_pourrat.jpeg);
+}
+.eq5
+{
+	background-image: url(Images/Usericons/5.jpeg);
+}
+.eq6
+{
+	background-image: url(Images/Usericons/6.jpeg);
+}
+
+@media only screen and (max-width: 768px)
+{
+	.team_bar
+	{
+		flex-direction: column;
+	}
+	.team_pic
+	{		
+		clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0 100%);
+		height: 360px;
+		width: auto;
+		background-repeat: no-repeat;
+		background-size: auto 100%;
+		background-position: center;
+		filter: grayscale(100%);
+		transition: 0.3s;
+		display:inline-block;
+		margin:0px;
+		padding:0px;
+		margin-left: -15px;
+		left:0;top:0;
+	}
+	.info
+	{
+		visibility:visible;
+	}
+	.team_pic:hover
+	{
+		width: auto;
+		filter:grayscale(0%);
+		clip-path: default;
+	}
+
+	.team_bar:hover && .team_pic:not(:hover)
+	{
+		width:auto;
+	}
+	.team_bar:hover > .team_pic:hover
+	{
+		width:auto;
+	}
+}
