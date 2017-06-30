@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+*
+{
+	font-family: 'Open Sans', sans-serif;
+}
+
+body
+{
+	width:calc(100vw - 17px);
+	margin:0px;
+	padding:0px;
+	margin-top:1em;
+	margin-bottom:1em;
+}
+
+.table_title
+{
+    background:rgba(35, 35, 35, 1);
+    color:rgba(235, 235, 235, 1);
+	text-align:left;
+	white-space:nowrap;
+}
+
+.table
+{
+	font-size:0.9rem;
+    border-collapse:collapse;
+    border-spacing:0px;
+    width:95%;
+	margin:auto;
+    text-align:center;
+	border:1px solid rgba(35, 35, 35, 0.9);
+	/*background:rgba(35, 35, 35, 0.9);*/
+	
+}
+.row_title
+{
+    padding-left:5px;
+    padding-right:5px;
+}
+
+.teeth_num
+{
+	text-align:center;
+}
+
+.chart_title
+{
+	text-align:center;
+	margin-bottom: 1em;
+	font-size:2rem;
+}
+
+.flex_col
+{
+	display:flex;
+	flex-direction:column;
+}
+
+.flex_row
+{
+	display:flex;
+	flex-direction:row;
+}
+
+.space_around
+{
+	
+}
+
+.pdata_container
+{
+	font-size:1rem;	
+	white-space: nowrap;
+	margin-bottom: 1em;
+	padding-left: 5rem;
+}
+
+.table input[type=text]
+{
+	width:100%;
+	text-align:center;
+	/*border:1px solid rgba(0, 0, 0, 0.3);*/
+	background:transparent;
+	border:none;
+}
+
+.table input[type=number]
+{
+	width:25%;
+	/*border:1px solid rgba(0, 0, 0, 0.3);*/
+	background:transparent;
+	border:none;
+
+	-moz-appearance:textfield;
+}
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-butto
+{
+	-webkit-appearance: none;
+}
+
+.table label {
+	display: inline-block;
+	cursor: pointer;
+	line-height:1rem;
+	width:25%;
+}
+
+.cb input[type=checkbox] {
+	display: none;
+}
+
+.cb input[type=checkbox] label:before 
+{
+	border-radius: 3px;
+}
+
+.bop input[type=checkbox]:checked + label:before {
+	content: "\2BC0";
+	color: #ce3333;
+	text-align: center;
+}
+
+.bop input[type=checkbox] + label:before {
+	content: "\2BC0";
+	color: #cecece;
+	text-align: center;
+}
+
+.plq input[type=checkbox]:checked + label:before {
+	content: "\2BC0";
+	color: #cece33;
+	text-align: center;
+}
+
+.plq input[type=checkbox] + label:before {
+	content: "\2BC0";
+	max-width:100%;
+	color: #cecece;
+	text-align: center;
+}
+
+.furca div
+{
+	text-align: center;
+}
+.furca .box
+{
+	margin:3px;
+	border: 1px solid black;
+	border-radius: 10px;
+	text-align: center;
+	display: inline-block;
+	cursor:pointer;
+
+	width: 20%;
+	height: 0;
+	padding-bottom: 20%;
+}
+.furca .half_fill
+{
+	background: linear-gradient(to right, black 0%, black 50%, white 51%);
+}
+
+.furca .fill
+{
+	background:black;
+}
+
+@media print
+{
+	body
+	{
+		margin:0;
+	}
+
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+	.table
+	{
+		width:100%;
+		margin:auto;
+		white-space:nowrap;
+		font-size:0.7rem;
+	}
+	.pdata_container
+	{
+		font-size:.7rem;
+	}
+	.pdata_container input
+	{
+		border:0;
+	}
+	.bop input[type=checkbox]:checked + label:before
+	{
+		content: "\2BC0";
+		color: #ce3333;
+		text-align: center;
+	}
+
+	.bop input[type=checkbox] + label:before {
+		content: "\2BC0";
+		color: transparent;
+		text-align: center;
+	}
+
+	.plq input[type=checkbox]:checked + label:before {
+		content: "\2BC0";
+		color: #cece33;
+		text-align: center;
+	}
+
+	.plq input[type=checkbox] + label:before {
+		content: "\2BC0";
+		color: transparent;
+		text-align: center;
+	}
+}
