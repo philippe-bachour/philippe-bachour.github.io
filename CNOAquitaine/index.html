@@ -13,14 +13,16 @@
 
 <body>
 <div class="main_surface">
-	<div id="head" class="head no_select">CNO Aquitaine
+	<div id="head" class="head no_select">
+		<div style="height:0px;display:inline-block;">
+			<img style="max-height: 100px" src="Images/Logo.jpeg">
+		</div>
 		<div style="display: inline;font-size: 1rem;">
 			<div id="login_popup" class="login_popup">
 				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
 			</div>
-				<i id="login_button" class="material-icons login_icon">account_circle</i>
+			<i id="login_button" class="material-icons login_icon">account_circle</i>
 		</div>
-		<div style="position:absolute;left:0;top:0;display:inline-block;"><img style="max-height: 50px" src="Images/Logo.jpeg"></div>
 	</div>
 	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 255;background:white;padding:0px;margin:0px;left:0px;">
 		<ul>
@@ -31,10 +33,10 @@
 			<li><a href="team.html">Documents</a></li>
 		</ul>
 	</div>
-	
-	<div class="section_title">
+	<div style="margin:5em;"></div>
+	<!--<div class="section_title">
 		<div class="section_title_underline">Evènements</div>
-	</div>
+	</div>-->
 <div class="section group">
 	<div class="col span_1_of_2">
 		<div class="event_wrapper">
@@ -101,9 +103,7 @@
 	<div class="col span_1_of_2">	
 		<div class="event_wrapper">
 			<div class="event_thumbnail">
-				<a href="https://google.fr"
-					style="background-image:url(Images/Events/symposium.jpg);"
-				></a>
+				<a href="https://google.fr"style="background-image:url(Images/Events/symposium.jpg);"></a>
 			</div>
 			<div class="event_databox">
 				<div>
@@ -111,7 +111,7 @@
 					<div class="event_databox_details">Le point sur les bruxismes</div>
 				</div>
 				<div class="event_databox_poster">
-					<div class="usericon" style="background-image:url(Images/Usericons/GCazals.png"></div>
+					<div class="usericon"style="background-image:url(Images/Usericons/GCazals.png)"></div>
 					<div class="post_info"><span class="username">G. Cazals</span><br>11:54 - 16/06/2017</div>
 				</div>
 			</div>
@@ -136,46 +136,47 @@
 	</div>
 </div>
 
+<script type="text/javascript" src="scripts.js"></script>
 <script type="text/javascript">
-	var last_known_scroll_position = 0;
-	var ticking = false;
+	/*
 
-	function doSomething(scroll_pos)
-	{
-		if(scroll_pos > 115)
-		{
-			document.getElementById("topbar").style.position = 'fixed';
-			document.getElementById('head').style.marginBottom = '50px';
-		}
-		else
-		{
-			document.getElementById("topbar").style.position = 'static';
-			document.getElementById('head').style.marginBottom = '0px';
-		}
-	}
+Chaque événement correspondrait à un rectangle avec sa longueur verticale, à l'intérieur du cadre il y aurait l'image en haut le titre en dessous, 
+trois lignes de texte visibles, et l'auteur comme tu l'as fait avec sa photo encerclée. Si le texte est plus long pour l'événement, il suffirait de 
+cliquer dessus pour que le cadre s'agrandisse et fasse apparaitre le texte manquant. Je pense qu'il fautque l'on puisse voir 3 événements sur la page 
+(3 rectangles) et on fait défiler horizontalement quand il y en aura plus. 
+A ce sujet je pense qu'il faut que nous ne mettions que les trois événements que je t'ai mis dans le dossier "événements" (chargé depuis wetransfer).
+Peux tu mettre le logo au centre de l’image à la place du titre « cno aquitaine »? Il faut recentrer la barre de menu. Le sous titre qui s’inscrit en 
+dessous n’est pas utile. Ce n’est pas grave si il n’y a pas écrit « événements » dans le menu accueil. 
+Concernant l’équipe, j’aime bien ta présentation. Il y a quelques erreurs dans les noms sur les visages (regarde dans le dossier, je crois t’avoir 
+donné un pdf avec les noms. dis moi si ce n’est pas le cas). La photo de frank pourrait est en fait celle de JF Laluque. Il faut rajouter les autres
+ photos et voir ce que cela donne avec 15 ou 16 à la suite.
+Concernant « qui sommes nous », peux tu mettre le logo Facebook en rouge comme je te l’ai envoyé avec le lien vers la page?
+Concernant les cycles de formation: Il faudrait que lorsqu’on clique sur un numéro de cycle, un paragraphe expliquant le tp apparaisse (il y aura des 
+photos avec après). Je te les joins ci dessous:
+Résumé modules cno:
 
-	window.addEventListener('scroll', function(e) {
-	  last_known_scroll_position = window.scrollY;
-	  if (!ticking) {
-	    window.requestAnimationFrame(function() {
-	      doSomething(last_known_scroll_position);
-	      ticking = false;
-	    });
-	  }
-	  ticking = true;
-	});
+Au cours de ce premier module, nous aborderons dans un premier temps les notions essentielles requises lors de la première consultation d’un patient. 
+Puis nous détaillerons comment préparer une  analyse occlusale et nous finirons par une mise en pratique de ces notions entre nous. Mots clés: 
+Dépistage, Occlusion d’Intercuspidie Maximale, Relation Centrée, Dimension Verticale, Articulateur, Arc facial. 
+    1er jour: Environ 4h30 de cours et 2h30 de TP.
+    2ème jour: Environ 2h30 de cours et 3h de TP.  
 
-	document.getElementById('login_button').addEventListener('click', function(){
-		var t = document.getElementById('login_popup');
-		if (t.style.visibility == 'visible')
-		{
-			t.style.visibility = 'hidden';
-		}
-		else
-		{
-			t.style.visibility = 'visible';
-		}
-	}, false);
+Après avoir appris à monter des modèles sur un articulateur, nous verrons comment le programmer pour faire une analyse occlusale. 
+Vous apprendrez quels sont les facteurs importants dans le choix d’une position occlusale thérapeutique au travers de cours, cas cliniques 
+et travaux pratiques. Mots clés: Analyse occlusale, Axiographie, Guide antérieur, Équilibration occlusale. 
+    1er jour: Environ 4h00 de cours et 3h00 de TP.
+    2ème jour: Environ 3h30 de cours et 3h30 de TP. 
+
+Ces deux jours sont consacrés aux troubles fonctionnels oro-faciaux dont les dysfonctionnements temporo-mandibulaires. Nous verrons comment 
+les diagnostiquer, les évaluer et les prendre en charge. Mots clés: Algies et Dysfonctionnements de l’Appareil Manducateur, Articulation 
+temporo-mandibulaire, Muscles masticateurs, Douleur, Déplacement discal, Arthrose, Sommeil, Bruxisme, Langue, Orthèse, Kinésithérapie maxillo-faciale. 
+    1er jour: Environ 6h de cours et 1h de TP.
+    2ème jour: Environ 5h de cours et 2h de TP. 
+
+Ce dernier module permet lors de la première journée de reprendre par ateliers en petit groupe les notions vues précédemment. 
+Le deuxième jour est consacré à des cours sur l’occlusion en implantologie et des présentations de cas cliniques des participants. « 
+
+	*/
 </script>
 
 </body>

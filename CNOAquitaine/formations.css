@@ -13,6 +13,7 @@
     font-weight:normal;
     padding:24px 24px 46px 24px;
     text-align:center;
+	cursor:pointer;
 }
 
 .cycle_table td
@@ -39,4 +40,20 @@
 	border-radius:36px;
 	color:white;
 	white-space:nowrap;
+}
+
+.formationtypes
+{
+	width:80%;
+	margin:auto;
+}
+.formationtypes p
+{
+	text-indent: 2em;
+}
+
+.cycle_details
+{
+	margin-top: 7em;
+	margin-bottom: 5em;
 }

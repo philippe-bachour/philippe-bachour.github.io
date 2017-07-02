@@ -14,14 +14,16 @@
 
 <body>
 <div class="main_surface">
-	<div id="head" class="head no_select">CNO Aquitaine
+	<div id="head" class="head no_select">
+		<div style="height:0px;display:inline-block;">
+			<img style="max-height: 100px" src="Images/Logo.jpeg">
+		</div>
 		<div style="display: inline;font-size: 1rem;">
 			<div id="login_popup" class="login_popup">
 				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
 			</div>
-				<i id="login_button" class="material-icons login_icon">account_circle</i>
+			<i id="login_button" class="material-icons login_icon">account_circle</i>
 		</div>
-		<div style="position:absolute;left:0;top:0;display:inline-block;"><img style="max-height: 50px" src="Images/Logo.jpeg"></div>
 	</div>
 	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 255;background:white;padding:0px;margin:0px;left:0px;">
 		<ul>
@@ -33,10 +35,6 @@
 		</ul>
 	</div>
 	
-	
-	<div class="section_title">
-		<div class="section_title_underline">L'équipe</div>
-	</div>
 	
 	<div class="team_bar">
 		<div class="team_block">
@@ -95,47 +93,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	var last_known_scroll_position = 0;
-	var ticking = false;
-
-	function doSomething(scroll_pos)
-	{
-		if(scroll_pos > 115)
-		{
-			document.getElementById("topbar").style.position = 'fixed';
-			document.getElementById('head').style.marginBottom = '50px';
-		}
-		else
-		{
-			document.getElementById("topbar").style.position = 'static';
-			document.getElementById('head').style.marginBottom = '0px';
-		}
-	}
-
-	window.addEventListener('scroll', function(e) {
-	  last_known_scroll_position = window.scrollY;
-	  if (!ticking) {
-	    window.requestAnimationFrame(function() {
-	      doSomething(last_known_scroll_position);
-	      ticking = false;
-	    });
-	  }
-	  ticking = true;
-	});
-
-	document.getElementById('login_button').addEventListener('click', function(){
-		var t = document.getElementById('login_popup');
-		if (t.style.visibility == 'visible')
-		{
-			t.style.visibility = 'hidden';
-		}
-		else
-		{
-			t.style.visibility = 'visible';
-		}
-	}, false);
-</script>
+<script type="text/javascript" src="scripts.js"></script>
 
 </body>
 </html>

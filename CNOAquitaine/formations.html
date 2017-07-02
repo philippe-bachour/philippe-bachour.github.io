@@ -14,14 +14,16 @@
 
 <body>
 <div class="main_surface">
-	<div id="head" class="head no_select">CNO Aquitaine
+	<div id="head" class="head no_select">
+		<div style="height:0px;display:inline-block;">
+			<img style="max-height: 100px" src="Images/Logo.jpeg">
+		</div>
 		<div style="display: inline;font-size: 1rem;">
 			<div id="login_popup" class="login_popup">
 				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
 			</div>
-				<i id="login_button" class="material-icons login_icon">account_circle</i>
+			<i id="login_button" class="material-icons login_icon">account_circle</i>
 		</div>
-		<div style="position:absolute;left:0;top:0;display:inline-block;"><img style="max-height: 50px" src="Images/Logo.jpeg"></div>
 	</div>
 	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 255;background:white;padding:0px;margin:0px;left:0px;">
 		<ul>
@@ -33,19 +35,14 @@
 		</ul>
 	</div>
 	
-	
-	<div class="section_title">
-		<div class="section_title_underline">Cycles de formation</div>
-	</div>
-
-<div style="text-align: center;margin:2rem;">Le premier cycle commencera les vendredi et samedi 22 et 23 septembre 2017.</div>
+<div style="text-align: center;margin:2rem;margin-top:3em;margin-bottom:5em;">Le premier cycle commencera les vendredi et samedi 22 et 23 septembre 2017.</div>
 
 <table class="cycle_table">			
     <tr>
-        <th>Cycle 1</th>
-        <th>Cycle 2</th>
-        <th>Cycle 3</th>
-        <th>Cycle 4</th>
+        <th id="cycle1">Cycle 1</th>
+        <th id="cycle2">Cycle 2</th>
+        <th id="cycle3">Cycle 3</th>
+        <th id="cycle4">Cycle 4</th>
     </tr>
     <tr>
         <td>
@@ -71,6 +68,46 @@
     </tr>
 </table>
 
+<div class="formationtypes">
+	<div id="cycle1d" class="cycle_details">
+		<div class="section_title">
+			<div class="section_title_underline">Cycle 1</div>
+		</div>
+		<p>Au cours de ce premier module, nous aborderons dans un premier temps les notions essentielles requises lors de la première consultation d’un patient. 
+	Puis nous détaillerons comment préparer une  analyse occlusale et nous finirons par une mise en pratique de ces notions entre nous. Mots clés: 
+	Dépistage, Occlusion d’Intercuspidie Maximale, Relation Centrée, Dimension Verticale, Articulateur, Arc facial. </p>
+		<p>1er jour : Environ 4h30 de cours et 2h30 de TP.</p>
+		<p>2ème jour : Environ 2h30 de cours et 3h de TP.  </p>
+	</div>
+	<div id="cycle2d" class="cycle_details">
+		<div class="section_title">
+			<div class="section_title_underline">Cycle 2</div>
+		</div>
+		<p>Après avoir appris à monter des modèles sur un articulateur, nous verrons comment le programmer pour faire une analyse occlusale. 
+	Vous apprendrez quels sont les facteurs importants dans le choix d’une position occlusale thérapeutique au travers de cours, cas cliniques 
+	et travaux pratiques. Mots clés: Analyse occlusale, Axiographie, Guide antérieur, Équilibration occlusale. </p>
+		<p>1er jour : Environ 4h00 de cours et 3h00 de TP.</p>
+		<p>2ème jour : Environ 3h30 de cours et 3h30 de TP.</p>
+	</div>
+	<div id="cycle3d" class="cycle_details">
+		<div class="section_title">
+			<div class="section_title_underline">Cycle 3</div>
+		</div>
+		<p>Ces deux jours sont consacrés aux troubles fonctionnels oro-faciaux dont les dysfonctionnements temporo-mandibulaires. Nous verrons comment 
+	les diagnostiquer, les évaluer et les prendre en charge. Mots clés: Algies et Dysfonctionnements de l’Appareil Manducateur, Articulation 
+	temporo-mandibulaire, Muscles masticateurs, Douleur, Déplacement discal, Arthrose, Sommeil, Bruxisme, Langue, Orthèse, Kinésithérapie maxillo-faciale. </p>
+		<p>1er jour : Environ 6h de cours et 1h de TP.</p>
+		<p>2ème jour : Environ 5h de cours et 2h de TP.</p>
+	</div>
+	<div id="cycle4d" class="cycle_details">
+		<div class="section_title">
+			<div class="section_title_underline">Cycle 4</div>
+		</div>
+		<p>Ce dernier module permet lors de la première journée de reprendre par ateliers en petit groupe les notions vues précédemment. 
+	Le deuxième jour est consacré à des cours sur l’occlusion en implantologie et des présentations de cas cliniques des participants.</p>
+	</div>
+</div>
+
 </div>
 <div class="footer no_select">
 	<div><a>Contact</a></div>
@@ -81,46 +118,19 @@
 	</div>
 </div>
 
+<script type="text/javascript" src="scripts.js"></script>
 <script type="text/javascript">
-	var last_known_scroll_position = 0;
-	var ticking = false;
-
-	function doSomething(scroll_pos)
+	for (var i = 1 ; i < 5 ; i++)
 	{
-		if(scroll_pos > 115)
-		{
-			document.getElementById("topbar").style.position = 'fixed';
-			document.getElementById('head').style.marginBottom = '50px';
-		}
-		else
-		{
-			document.getElementById("topbar").style.position = 'static';
-			document.getElementById('head').style.marginBottom = '0px';
-		}
+		(function(k){
+			document.getElementById('cycle' + k).addEventListener('click', function(){makeItListen(k);}, false);
+		}(i));		
 	}
-
-	window.addEventListener('scroll', function(e) {
-	  last_known_scroll_position = window.scrollY;
-	  if (!ticking) {
-	    window.requestAnimationFrame(function() {
-	      doSomething(last_known_scroll_position);
-	      ticking = false;
-	    });
-	  }
-	  ticking = true;
-	});
-
-	document.getElementById('login_button').addEventListener('click', function(){
-		var t = document.getElementById('login_popup');
-		if (t.style.visibility == 'visible')
-		{
-			t.style.visibility = 'hidden';
-		}
-		else
-		{
-			t.style.visibility = 'visible';
-		}
-	}, false);
+	function makeItListen(i)
+	{
+		var x = document.getElementById('cycle' + i + 'd').getBoundingClientRect();
+		window.scrollTo(0, x.top - 150);
+	}
 </script>
 
 </body>
