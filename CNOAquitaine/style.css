@@ -135,12 +135,11 @@ a
 }
 .event_thumbnail a
 {
-	border: 1px solid rgba(150, 150, 150, 1.0);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	width:  230px;
-	height: 230px;
+	width:  275px;
+	height: 275px;
 }
 
 .event_databox
@@ -164,6 +163,24 @@ a
 {
 	color:rgb(100, 100, 100);
 	font-size: 1rem;
+
+	/*
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 4;
+	//line-height: 1rem;
+	max-height: 4rem;
+	*/
+}
+.event_databox_details:hover
+{
+	z-index: 5;
+	overflow: initial;
+	text-overflow: initial;
+	line-height: initial;
+	max-height: initial; 
 }
 
 .event_databox_poster
@@ -228,11 +245,40 @@ a
 	width: 49.2%;
 }
 
+.bold_highlight
+{
+	font-weight: bold;
+	color: var(--highlight-color);
+}
+
+.hidden_evt
+{
+	visibility: hidden;
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+	position:fixed;
+	margin:auto;
+	top:0;
+	bottom:0;
+	max-height: 95vh;
+	z-index:100;
+	text-align: center;
+	border:1px solid black;
+	left: 50%;
+    transform: translate(-50%, 0);
+	background:rgba(235, 235, 235, 0.9)
+}
+.hidden_evt img
+{
+	max-height: 90vh;
+}
+
 @media screen and (max-width: 1600px)
 {
 	.event_databox_details
 	{
-		font-size: .9rem;
+		--font-size: .9rem;
 	}
 	.usericon
 	{
@@ -247,13 +293,24 @@ a
 	}
 }
 
-@media screen and (max-width: 1200px)
+@media screen and (max-width: 1750px)
 {
 	.col { margin: 1% 0 1% 0%;}
 	.span_1_of_2, .span_2_of_2 { width: 100%; }
+
+	.event_wrapper
+	{
+		width: 90%;
+		margin:auto;
+	}
+	.event_databox_details
+	{
+		padding: 1em;
+		text-align: justify;
+	}
 }
 
-@media screen and (max-width: 768px)
+@media screen and (max-width: 720px)
 {
 	.event_wrapper
 	{
@@ -362,4 +419,23 @@ a
 	top:50px;
 	border-radius: 3px;
 	box-shadow: 0px 0px 3px rgb(35, 35, 35);
+}
+
+.pdf_frame
+{
+	height: 0%;
+	width: 50vw;
+}
+
+.dark_veil
+{
+	visibility:hidden;
+	background-color: rgba(65, 65, 65, 0.9);
+	height:100vh;
+	width:100vw;
+	overflow:hidden;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:51;
 }

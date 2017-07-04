@@ -1,6 +1,5 @@
 .team_bar
 {
-	//background-color: rgb(65, 65, 65);
 	text-align: center;
 	display:flex;
 	flex-direction: row;
@@ -55,11 +54,6 @@
 }
 .info
 {
-	#visibility:hidden;
-	#position: absolute;
-	#border:1px solid rgba(65, 65, 65, 0.9);
-	#background: rgb(230, 230, 230, 0.9);
-
 	min-height: 7rem;
 	display:inline-block;
 	bottom: -10%;
@@ -79,6 +73,7 @@
 {
 	width:5%;
 }
+
 .team_bar:hover > .team_pic:hover
 {
 	width:50%;
@@ -122,9 +117,9 @@
 {
 	background-image: url(Images/Usericons/xavier_crauste.jpeg);
 }
-.fpourrat
+.jflaluque
 {
-	background-image: url(Images/Usericons/franck_pourrat.jpeg);
+	background-image: url(Images/Usericons/jf_laluque.jpeg);
 }
 .eq5
 {

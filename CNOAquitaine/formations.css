@@ -52,6 +52,12 @@
 	text-indent: 2em;
 }
 
+.formationtypes li
+{
+	margin-left: 2em;
+	padding:0.5em;
+}
+
 .cycle_details
 {
 	margin-top: 7em;
