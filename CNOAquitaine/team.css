@@ -6,6 +6,7 @@
 	justify-content: center;
 	position: relative;
 	width: 100%;
+	margin-top: 3em;
 }
 .team_block
 {
@@ -64,7 +65,7 @@
 }
 .team_pic:hover .info
 {
-	z-index: 35;
+	z-index: 0;
 	visibility: visible;
 	text-align: center;
 }
@@ -121,13 +122,13 @@
 {
 	background-image: url(Images/Usericons/jf_laluque.jpeg);
 }
-.eq5
+.missingno0
 {
-	background-image: url(Images/Usericons/5.jpeg);
+	background-image: url(Images/Usericons/IMG_4001.jpeg);
 }
-.eq6
+.missingno1
 {
-	background-image: url(Images/Usericons/6.jpeg);
+	background-image: url(Images/Usericons/IMG_3999.jpeg);
 }
 
 @media only screen and (max-width: 768px)

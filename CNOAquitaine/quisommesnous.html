@@ -7,33 +7,30 @@
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="topbar.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta charset="utf8">
 </head>
 
 <body>
-<div class="main_surface">
-	<div id="head" class="head no_select">
-		<div style="height:0px;display:inline-block;">
-			<img style="max-height: 100px" src="Images/Logo.jpeg">
-		</div>
-		<div style="display: inline;font-size: 1rem;">
-			<div id="login_popup" class="login_popup">
-				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
-			</div>
-			<i id="login_button" class="material-icons login_icon">account_circle</i>
-		</div>
-	</div>
-	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 255;background:white;padding:0px;margin:0px;left:0px;">
+<div class="head">
+	<div id="topbar" class="topbar no_select">
 		<ul>
 			<li><a href="index.html">Accueil</a></li>
 			<li><a href="lequipe.html">L'équipe</a></li>
 			<li class="topbar_selected"><a href="quisommesnous.html">Qui sommes-nous ?</a></li>
 			<li><a href="formations.html">Cycles de formation</a></li>
 			<li><a href="documents.html">Documents</a></li>
+			<li style="float:right;padding-right:2em;"><a href="documents.html">Connexion</a></li>
 		</ul>
+		<div style="display: inline;font-size: 1rem;float:left;position:absolute;">
+			<div id="login_popup" class="login_popup">
+				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
+			</div>
+		</div>
 	</div>
-	
+</div>	
+<div class="main_surface">
 
 	<div class="raw_text">
 		<p>Le Collège National d'Occlusodontologie a été fondé en 1984 par Christian KNELLESEN, André LUBESPERE, Jean-François MICHEL, Jean-Claude QUEMAR, Daniel ROZENCZWEIG et Jean-Pierre TOUBOL. Il est réparti en 12 sections locales.</p>
@@ -43,6 +40,7 @@
 	</div>
 
 </div>
+<div style="width:100%;height:298px;background:url(Images/panorama.png);"></div>
 <div class="footer no_select">
 	<div><a>Contact</a></div>
 	<div class="footer_section">

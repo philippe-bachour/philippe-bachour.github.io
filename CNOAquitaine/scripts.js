@@ -1,20 +1,43 @@
 var last_known_scroll_position = 0;
 var ticking = false;
 
+var is_index = (location.pathname.indexOf("index") > -1) ? true : false;
+
 var head_origin = document.getElementById("topbar").getBoundingClientRect();
-head_origin = head_origin.top;
+if (window.scrollY <= 1)
+{
+	head_origin = head_origin.top;
+}
+else
+{
+	head_origin = window.innerHeight - head_origin.height;
+}
 
 function doSomething(scroll_pos)
 {
 	if(scroll_pos > head_origin)
 	{
 		document.getElementById("topbar").style.position = 'fixed';
-		document.getElementById('head').style.marginBottom = '100px';
+		document.getElementById("topbar").style.top = '0';
+		document.getElementById("topbar").style.background = 'rgba(35, 35, 35, 0.95)'
+		//document.getElementById('head').style.marginBottom = '100px';
 	}
 	else
 	{
-		document.getElementById("topbar").style.position = 'static';
-		document.getElementById('head').style.marginBottom = '0px';
+		document.getElementById("topbar").style.background = 'transparent'
+		if (is_index)
+		{
+			document.getElementById("topbar").style.position = 'absolute';
+			document.getElementById("topbar").style.bottom = '0';
+			document.getElementById("topbar").style.top = 'initial';
+		}
+		else
+		{
+			document.getElementById("topbar").style.position = 'absolute';
+			document.getElementById("topbar").style.bottom = '0';
+			document.getElementById("topbar").style.top = 'initial';
+		}
+		//document.getElementById('head').style.marginBottom = '0px';
 	}
 }
 
@@ -28,15 +51,3 @@ window.addEventListener('scroll', function(e) {
 	}
 	 ticking = true;
 });
-
-document.getElementById('login_button').addEventListener('click', function(){
-	var t = document.getElementById('login_popup');
-	if (t.style.visibility == 'visible')
-	{
-		t.style.visibility = 'hidden';
-	}
-	else
-	{
-		t.style.visibility = 'visible';
-	}
-}, false);

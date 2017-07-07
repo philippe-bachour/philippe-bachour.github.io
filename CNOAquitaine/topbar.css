@@ -1,0 +1,15 @@
+.topbar
+{
+	border-top:1px solid rgba(200, 200, 200, 0.0);
+	border-bottom:1px solid rgba(200, 200, 200, 1.0);
+	height:50px;
+	font-size:14px;
+	vertical-align: center;
+	background-color: transparent;
+	color:white;	
+	position:absolute;
+	bottom:0;
+    width:100%;
+    z-index: 50;
+    margin:0px;
+}

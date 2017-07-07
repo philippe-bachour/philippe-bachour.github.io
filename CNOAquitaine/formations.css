@@ -63,3 +63,9 @@
 	margin-top: 7em;
 	margin-bottom: 5em;
 }
+
+.hidden_char
+{
+	color:transparent;
+	user-select: none;
+}

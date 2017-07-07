@@ -4,36 +4,33 @@
 <head>
 	<title>CNO Aquitaine</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> 
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="topbar_index.css">
 	<meta charset="utf8">
 </head>
 
 <body>
 	<div id="dark_veil" class="dark_veil"></div>
-<div class="main_surface">
-	<div id="head" class="head no_select">
-		<div style="height:0px;display:inline-block;">
-			<img style="max-height: 100px" src="Images/Logo.jpeg">
-		</div>
-		<div style="display: inline;font-size: 1rem;">
-			<div id="login_popup" class="login_popup">
-				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
-			</div>
-			<i id="login_button" class="material-icons login_icon">account_circle</i>
-		</div>
-	</div>
-	<div id="topbar" class="topbar no_select" style="top:0;width:100%;z-index: 50;background:white;padding:0px;margin:0px;left:0px;">
+	
+<div class="index_head">
+	<div id="topbar" class="topbar no_select">
 		<ul>
 			<li class="topbar_selected"><a href="index.html">Accueil</a></li>
 			<li><a href="lequipe.html">L'équipe</a></li>
 			<li><a href="quisommesnous.html">Qui sommes-nous ?</a></li>
 			<li><a href="formations.html">Cycles de formation</a></li>
 			<li><a href="documents.html">Documents</a></li>
+			<li style="float:right;padding-right:2em;"><a href="documents.html">Connexion</a></li>
 		</ul>
+		<div style="display: inline;font-size: 1rem;float:left;position:absolute;">
+			<div id="login_popup" class="login_popup">
+				Nom utilisateur : <input type="text"><br>Mot de passe : <input type="text">
+			</div>
+		</div>
 	</div>
+</div>
+<div class="main_surface">
 	<div style="margin:5em;"></div>
 	<!--<div class="section_title">
 		<div class="section_title_underline">Evènements</div>
@@ -43,6 +40,7 @@
 		<div class="event_wrapper">
 			<div class="event_thumbnail" id="evt_0">
 				<a style="background-image:url(Images/Events/21sep.jpg);"></a>
+				<a class="pdf_overlay"></a>
 				<div class="hidden_evt" id="evt_0h">
 					<object id="pdf_if0" class="pdf_frame" data="Documents/plaquette_21_09_2017.pdf" type="application/pdf">
 					</object>
@@ -56,7 +54,7 @@
 						dentistes et une kinésithérapeute interviendront sur le sujet. </div>
 				</div>
 				<div class="event_databox_poster">
-					<div class="usericon" style="background-image:url(Images/Usericons/GCazals.png)"></div>
+					<div class="usericon" style="background-image:url(Images/Usericons/gauthier_cazals.jpeg)"></div>
 					<div class="post_info"><span class="username">G. Cazals</span><br>11:54 - 16/06/2017</div>
 				</div>
 			</div>
@@ -66,6 +64,7 @@
 		<div class="event_wrapper">
 			<div class="event_thumbnail" id="evt_1">
 				<a style="background-image:url(Images/Events/inscription_modules_cycles_2017.jpg);"></a>
+				<a class="pdf_overlay"></a>
 				<div class="hidden_evt" id="evt_1h">
 					<object id="pdf_if1" class="pdf_frame" data="Documents/inscription_modules_cycles_2017.pdf" type="application/pdf">
 					</object>
@@ -78,7 +77,7 @@
 						2017. Pour plus d'informations <a href="formations.html">cliquez ici</a>.</div>
 				</div>
 				<div class="event_databox_poster">
-					<div class="usericon" style="background-image:url(Images/Usericons/GCazals.png)"></div>
+					<div class="usericon" style="background-image:url(Images/Usericons/gauthier_cazals.jpeg)"></div>
 					<div class="post_info"><span class="username">G. Cazals</span><br>11:54 - 16/06/2017</div>
 				</div>
 			</div>
@@ -93,6 +92,7 @@
 		<div class="event_wrapper">
 			<div class="event_thumbnail" id="evt_2">
 				<a style="background-image:url(Images/Events/symposium.jpg);"></a>
+				<a class="pdf_overlay"></a>
 				<div class="hidden_evt" id="evt_2h">
 					<object id="pdf_if2" class="pdf_frame" data="Documents/programme_CNO_2018_V4.pdf" type="application/pdf">
 					</object>
@@ -107,7 +107,7 @@
 						Pour plus d'informations, <a href="formations.html">cliquez ici</a>.</div>
 				</div>
 				<div class="event_databox_poster">
-					<div class="usericon" style="background-image:url(Images/Usericons/GCazals.png)"></div>
+					<div class="usericon" style="background-image:url(Images/Usericons/gauthier_cazals.jpeg)"></div>
 					<div class="post_info"><span class="username">G. Cazals</span><br>11:54 - 16/06/2017</div>
 				</div>
 			</div>
@@ -119,13 +119,13 @@
 </div>
 
 <div class="page_list no_select">
+	Page : 
 	<div class="page_num">1</div>
-	<div class="page_num">2</div>
-	<div class="page_num">...</div>
-	<div class="page_num">8</div>
 </div>
 
 </div>
+</div>
+<div style="width:100%;height:298px;background:url(Images/panorama.png);"></div>
 <div class="footer no_select">
 	<div><a>Contact</a></div>
 	<div class="footer_section">
