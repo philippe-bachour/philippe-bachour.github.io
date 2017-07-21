@@ -24,6 +24,7 @@ var __dictionnary = {
     periodontal_chart:'Periodontal Chart',
 
     //statistics
+    statistics:'Statistics',
     missing_teeth:'Missing teeth',
 
     //voice control
