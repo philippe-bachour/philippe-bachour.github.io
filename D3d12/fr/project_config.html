@@ -1,0 +1,78 @@
+<!DOCTYPE>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="style.css">
+	
+	<title>Configuration du projet</title>
+</head>
+<body>
+<div>
+	<div class="lesson_title">Configurer le projet avec Visual Studio</div>
+<p>Avant tout, vous le savez sans doute, Direct3D 12 n'est disponible que pour Windows 10.</p>
+<p>Vous devez également avoir installé le Windows 10 SDK (ça se fait avec l'installeur de Visual Studio, et vous pouvez aussi le télécharger ici <a href="https://developer.microsoft.com/fr-fr/windows/downloads">https://developer.microsoft.com/fr-fr/windows/downloads</a>).</p>
+<p>Lancez Visual Studio et créez un nouveau projet vide.</p>
+<p>Changez la plateforme en x64 (sauf si vous avez un OS 32bits).</p>
+<p>Clic droit sur le projet (le projet, pas la solution) &#62; Propriétés.</p>
+<p>Dans Linker &#62; Input (éditeur de liens &#62; entrée en français). Assurez-vous d'être sur "All Configurations/Toutes les configurations" et plateforme x64. Rajoutez "D3DCompiler.lib;D3d12.lib;dxgi.lib" dans Additional Dependencies (dépendances supplémentaires). C'est tout ce dont on a besoin pour le moment.</p>
+<p>Créez main.cpp, ainsi qu'un .h et un .cpp pour la classe de base de D3D12 qu'on va commencer à coder dans le cours suivant.</p>
+<p>Afin de libérer la mémoire des objets COM qu'on va utiliser, on va créer une macro : </p>
+<pre class="prettyprint linenums">
+#ifndef SAFE_RELEASE
+#define SAFE_RELEASE(x) \
+	if(x != nullptr) \
+	{ \
+		x->Release(); \
+		x = nullptr; \
+	}
+#endif
+</pre>
+<p>Ou la fonction template suivante, ce sera au choix ;)</p>
+<pre class="prettyprint linenums">
+template &#60;typename T&#62;
+void SAFE_RELEASE(T*& ptr)
+{
+	if(ptr != nullptr)
+	{
+		ptr->Release();
+		ptr = nullptr;
+	}
+}
+</pre>
+<p>On va également définir une classe dérivée de std::exception pour les HRESULT que renvoient la plupart des fonctions de Direct3D (elle provient du github de Microsoft <a href="https://github.com/Microsoft/DirectXTK/wiki/ThrowIfFailed">ThrowIfFailed</a>)</p>
+<pre class="prettyprint linenums">
+class com_exception : public std::exception
+{
+public:
+	com_exception(HRESULT hr) : result(hr) {}
+
+	virtual const char* what() const override
+	{
+		static char s_str[64] = { 0 };
+		sprintf_s(s_str, "Failure with HRESULT of %08X",
+			static_cast&#60;unsigned int&#62;(result));
+		return s_str;
+	}
+
+private:
+	HRESULT result;
+};
+
+// Helper utility converts D3D API failures into exceptions.
+inline void ThrowIfFailed(HRESULT hr)
+{
+	if (FAILED(hr))
+	{
+		throw com_exception(hr);
+	}
+}
+</pre>
+<p>Enfin, allez télécharger le fichier <a href="https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/Templates/DirectX12App/Common/d3dx12.h">d3dx12.h</a>, et ajoutez-le à votre projet.</p>
+<p>Dans le code, j'utilise une instance de classe Window (elle ne provient pas de l'API Windows). Je n'expliquerai pas comment créer une fenêtre avec l'API Windows, vous pouvez trouver des <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms633575(v=vs.85).aspx">exemples de code sur MSDN</a> pour le faire, et il existe déjà beaucoup de tutoriels probablement dans toutes les langues sur internet.</p>
+<p class="centered">Vous pouvez passer au prochain cours : <a href="d3d12_init.html">Initialisation de Direct3d12</a></p>
+</div>
+</body>
+</html>

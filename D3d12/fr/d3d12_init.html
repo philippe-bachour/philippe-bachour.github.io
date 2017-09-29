@@ -1,0 +1,213 @@
+<!DOCTYPE>
+<html>
+<head>
+	<meta charset="UTF8">
+	<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<title>Initialiser D3D12</title>
+<body>
+<div>
+	<div class="lesson_title">Initialiser D3D12</div>
+	<ul>
+		<li>Création d'un Device</li>
+		<li>Creation d'une CommandQueue</li>
+		<li>Création d'une SwapChain</li>
+		<li>Creation d'une render target view (RTV) descriptor heap</li>
+		<li>Créer des ressources pour chaque frame</li>
+		<li>Créer un command allocator</li>
+	</ul>
+	<p>Nous allons voir au fur et à mesure à quoi tout cela correspond.</p>
+</div>
+<div>
+	<div class="subsection">ID3D12Device</div>
+	<p>Mais tout d'abord, on va voir comment créer un ID3D12Device. C'est par le biais de cette interface (les classes dont le nom commence par I sont des interfaces) que nous allons pouvoir créer des command allocators, command lists, command queues etc... ID3D12Device représente une carte graphique la plupart du temps. La plupart du temps seulement, car on peut aussi utiliser un "émulateur logiciel", ce qui vous permettra de jouer avec D3D12 même si votre carte ne le supporte pas : )</p>
+	<p>Juste avant de commencer, faisons connaissance avec IID_PPV_ARGS. C'est une macro définie comme suit :
+<pre class="prettyprint linenums">#define IID_PPV_ARGS(ppType) __uuidof(**(ppType)), IID_PPV_ARGS_Helper(ppType)</pre><p>Le mot clé __uuidof permet de récupérer un GUID (Globally Unique Identifier, un identifiant unique) automatiquement en fonction du pointeur d'interface de l'expression (c'est évalué au moment de la compilation évidemment). IID_PPV_ARGS_Helper est une fonction template qui vérifie que l'interface dérive bien de IUnknown (interface dont héritent tous les objets COM) et caste ppType en void**. Beaucoup de fonctions de l'API D3D12 prennent comme arguments le type de l'interface à créer et un void**. IID = Interface ID, PPV = pointer to pointer to void, ARGS pour arguments.</p>
+<p>Notre classe de base va ressembler à ceci :</p>
+<pre class="prettyprint linenums">
+#include &#60;dxgi1_4.h&#62;
+#include "d3dx12.h"
+//#include "le_fichier_dans_lequel_vous_avez_mis_les_macros/templates.h"
+
+class D3D12Renderer
+{
+public:
+	D3D12Renderer();
+	~D3D12Renderer();
+	void Initialise();
+
+private:
+	ID3D12Device* m_Device;
+	ID3D12Resource* m_RenderTargets[2];
+	ID3D12CommandQueue* m_CommandQueue;
+	ID3D12CommandAllocator* m_CommandAllocator;
+	ID3D12DescriptorHeap* m_RTVDescriptorHeap;
+	UINT m_RTVDescriptorSize;
+	
+	IDXGISwapChain3* m_SwapChain;
+	UINT m_FrameIndex;
+	
+
+#ifdef _DEBUG
+	ID3D12Debug* m_DebugController;
+#endif
+};
+</pre>
+<p>DXGI (Microsoft DirectX Graphics Infrastructure) a pour rôle de s'occuper des tâches bas-niveau qui peuvent être indépendantes de DirectX. DXGI communique avec le matériel et le pilote du mode noyau.</p>
+<p>Voyons maintenant la fonction Initialise :</p>
+<pre class="prettyprint linenums">
+void D3D12Renderer::Initialise()
+{
+#ifdef _DEBUG
+	/* On commence par activer le DebugLayer, ce qui nous permettra d'obtenir des messages d'erreur de D3D12 dans l'output de Visual Studio. Vous devez l'activer avant de créer le ID3D12Device, sinon ce dernier sera détruit. */
+	ThrowIfFailed(D3D12GetDebugInterface(IID_PPV_ARGS(&m_DebugController)));
+	m_DebugController->EnableDebugLayer();
+#endif
+
+	//On crée une IDXGIFactory4, le 4 est la dernière version qui permet de récupérer un WARP Device pour D3D12 (avec les version plus anciennes, vous ne pouvez pas en récupérer pour D3D12). Je vous mets le lien vers la doc de DXGI sur MSDN tout en bas de la page.
+	IDXGIFactory4* factory = nullptr;
+	ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&factory)));
+	
+	// on essaye ensuite de récupérer un hardware adapter. Un adapteur représente le GPU
+	IDXGIAdapter1* hardwareAdapter = nullptr;
+	for (UINT adapterIndex = 0; ; ++adapterIndex)
+	{
+		IDXGIAdapter1* pAdapter = nullptr;
+		if (DXGI_ERROR_NOT_FOUND == factory->EnumAdapters1(adapterIndex, &pAdapter))
+		{
+			//si on ne trouve pas d'adapteur c'est tout simplement qu'il n'y en a plus... donc on sort de la boucle for
+			break;
+		}
+		// si on trouve un adapteur, on va tester s'il supporte le niveau de fonctionnalité de D3D12 en créant un faux D3D12Device :
+		if (SUCCEEDED(D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0,
+			__uuidof(ID3D12Device), nullptr)))
+		{
+			hardwareAdapter = pAdapter;
+			break;
+		}
+		SAFE_RELEASE(pAdapter);
+	}
+
+	// si on n'a pas pu récupérer de device compatible ou créer de device matériel, on peut créer un WARP device (WARP est un software rasterizer)
+	if (hardwareAdapter == nullptr || 
+		FAILED(D3D12CreateDevice(hardwareAdapter, featureLevel, IID_PPV_ARGS(&m_Device))))
+	{
+		IDXGIAdapter* warpAdapter;
+		ThrowIfFailed(factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
+
+		ThrowIfFailed(D3D12CreateDevice(warpAdapter,
+			featureLevel,
+			IID_PPV_ARGS(&m_Device)));
+	}
+}
+</pre>
+<p>Une note concernant les FEATURE_LEVEL (niveau de fonctionnalité) : <strong>les niveaux de fonctionnalité ne sont pas les mêmes que les versions de l'API</strong>. Tous les pilotes Direct3D 12 ont un feature level 11.0 ou supérieur. Je suppose que c'est dû au fait que quand l'API D3D12 a été créée, elle ne nécessitait pas de fonctionnalités matérielles différentes par rapport à D3D11, donc le feature level n'a pas changé (à prendre avec des pincettes, ce n'est qu'une supposition...)</p>
+</div>
+<div>
+	<div class="subsection">ID3D12CommandQueue</div>
+	<p>Le GPU possède une file d'execution (Command Queue), c'est une suite de commandes qu'il va executer dans l'ordre dans lequel elles lui ont été envoyées par le CPU, au travers des CommandLists (on parlera des command lists dans le cours suivant).</p>
+	<p>Il est important de noter que les commandes ne sont pas nécessairement exécutées au moment où elles sont envoyées au GPU. Une commande envoyée au moment où la file d'execution est déjà bien remplie ne sera exécutée que plus tard. Les mauvais scénarios sont quand la file est pleine : le CPU va devoir attendre que le GPU fasse son travail, ou si au contraire la file est vide, le GPU n'aura rien à faire. Le but pour obtenir les meilleures performances est évidemment que le CPU et le GPU s'attendent le moins possible. La CommandQueue est représentée par l'interface ID3D12CommandQueue. Attelons-nous maintenant à sa création :</p>
+</div>
+<div>
+	<pre class="prettyprint linenums">
+	typedef struct D3D12_COMMAND_QUEUE_DESC {
+		D3D12_COMMAND_LIST_TYPE Type;
+  		INT Priority;
+  		D3D12_COMMAND_QUEUE_FLAGS Flags;
+  		UINT NodeMask;
+	} D3D12_COMMAND_QUEUE_DESC;
+	</pre>
+	<p>Il existe différents types de command lists, ici nous allons utiliser D3D12_COMMAND_LIST_TYPE_DIRECT, command list qui comme son nom l'indique peut être utilisée directement par le GPU. Nous parlerons des autres types plus tard (si vous voulez en savoir plus maintenant, rendez-vous sur <a href="https://msdn.microsoft.com/fr-fr/library/windows/desktop/dn770348(v=vs.85).aspx">MSDN</a>).</p>
+	<p>Le node mask permet d'identifier le GPU avec lequel sera utilisée la command queue si on utilise plusieurs GPU, ce n'est pas le cas ici donc ce membre sera mis à zéro.</p>
+	<p>Les flags servent juste à désactiver le TDM. Le TDM (Timeout Detection Recovery) en gros permet à l'OS de détecter quand le GPU ne répond plus (boucle infinie dans un shader par exemple) pendant plus de 2 secondes par défaut. Nous utiliserons D3D12_COMMAND_QUEUE_FLAG_NONE.</p>
+	<p>Nous laisserons la priorité normale.</p>
+<pre class="prettyprint linenums">
+	// ce code se place à la suite de ce que nous avons fait plus haut. J'essaierai de toujours préciser où doit se placer le code SAUF si c'est directement à la suite du code précédent, merci de me le signaler si je l'oublie : )
+	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+
+	ThrowIfFailed(m_Device->CreateCommandQueue(&queueDesc,
+		IID_PPV_ARGS(&m_CommandQueue)));
+	</pre>
+</div>
+<div>
+	<div class="subsection">IDXGISwapChain :</div>
+	<p>Afin d'éviter le scintillement, on utilise deux buffers : un sur lequel le GPU va faire le rendu, un qui est affiché à l'écran. Cette technique s'appelle <span class="italic">double buffering</span>. Le buffer dans lequel le GPU écrit les données s'appelle le <span class="italic">back buffer</span>, celui qui est affiché à l'écran le <span class="italic">front buffer</span>. Le fait d'inverser (swap) ces buffers s'appelle <span class="italic">"presenting"</span>(vous verrez d'ailleurs, la fonction qui permet de le faire est... Present() !). C'est une opération très peu coûteuse puisqu'elle consiste simplement à inverser les pointeurs vers le back buffer et le front buffer.</p>
+	<p>Le front et back buffer forment une <span class="italic">swap chain</span>, qui est représentée par une IDXGISwapChain dans Direct3D.</p>
+	<p>Voici comment on crée la swap chain :</p>
+</div>
+<div>
+<pre class="prettyprint linenums">
+	DXGI_SWAP_CHAIN_DESC scDesc = {}; // structure qui permet de décrire la swap chain à créer
+	scDesc.BufferCount = bufferCount; // nombre de buffers, 2 pour double buffering
+	scDesc.BufferDesc.Width = window.GetClientWidth(); // largeur en pixels des buffers
+	scDesc.BufferDesc.Height = window.GetClientHeight(); // hauteur
+	scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // format des texels
+	scDesc.BufferDesc.RefreshRate.Denominator = 1;
+	scDesc.BufferDesc.RefreshRate.Numerator = 60;
+	scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // la surface va servir comme sortie de rendu
+	scDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // définit ce qu'il advient du backbuffer après l'appel à Present(). Ici les données seront effacées après cet appel.
+	scDesc.OutputWindow = window.GetNativeHandle(); // HWND de la fenêtre de rendu
+	scDesc.SampleDesc.Count = 1; // nombre de multisamples par pixel
+	scDesc.Windowed = TRUE; // mode fenêtré
+
+	ThrowIfFailed(factory->CreateSwapChain(m_CommandQueue,
+		&scDesc, reinterpret_cast&#60;IDXGISwapChain*&#62;(m_SwapChain)));
+
+	m_FrameIndex = m_SwapChain->GetCurrentBackBufferIndex(); // la fonction membre GetCurrentBackBufferIndex() n'existe que sur IDXGISwapChain3 ; )
+</pre>
+</div>
+<div>
+	<div class="subsection">ID3D12DescriptorHeap</div>
+	<p>On a maintenant une swap chain. Les <span class="italic">descripteur</span> sont des structures qui servent à décrire les ressources. Quand on lie des ressources au pipeline de rendu, on spécifie un descripteur de la ressource plutôt que de spécifier la ressource elle-même. Une ressource en elle même ne décrit pas ce qu'elle est, et c'est à ça que servent les descripteurs. Ca va nous permettre par exemple d'utiliser une même ressource à la fois comme render target et comme texture.</p>
+	<p class="info">Les termes view et descriptor sont synonymes, le terme "view" était utilisé dans les précédentes versions de Direct3D.</p>
+	<p>Bref vous l'avez deviné, on va créer des descripteurs pour les buffers de rendu.</p>
+</div>
+<div>
+	<pre class="prettyprint linenums">
+		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+		rtvHeapDesc.NumDescriptors = bufferCount; // nombre de descripteurs : 2 car on utilise le double buffering
+		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // type = RTV : Render Target View
+		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE; // l'autre flag D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE permet d'indiquer que ces descripteurs pourront être accédés par les programmes des shaders. On ne l'utilise pas ici
+
+		ThrowIfFailed(m_Device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_RTVDescriptorHeap))); //création du descriptor heap
+		m_RTVDescriptorSize = m_Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV); // et ça c'est quoi ?? pssst, c'est un secret pour l'instant, on va voir ça bientôt...
+	</pre>
+	<p>Vous noterez quelque chose : c'est qu'on a utilisé une D3D12_DESCRIPTOR_<strong>HEAP</strong>_DESC. Que vient faire heap là dedans ? Les descriptor heaps sont des tableaux de descripteurs. Vous ne pouvez pas mettre des descripteurs de types différents dans une même descriptor heap (exactement comme vous ne pouvez pas mettre différents types dans un std::vector ou dans un tableau en C). Vous pouvez par contre créer plusieurs descriptor heaps de même type. Ici on va créer 2 buffers de même type (render target view) d'où la descriptor heap ;)</p>
+	<p>On va aussi créer les descripteurs des buffers :</p>
+	<pre class="prettyprint linenums">
+		// les descriptor handles sont des structures qui identifient des descripteurs spécifiques dans les descriptor heaps.
+		// C3CDX12 n'est pas une faute de frappe, a provient du fichier que je vous ai demandé de télécharger : d3dx12.h, qui contient des structures et fonction pour nous faciliter la vie
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVDescriptorHeap->GetCPUDescriptorHandleForHeapStart()); // on récupère un descriptor handle du début du tas
+
+		for (UINT i = 0; i < bufferCount; ++i)
+		{
+			ThrowIfFailed(m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&m_RenderTargets[i]))); // on récupère le i-ième buffer de la swap chain
+			m_Device->CreateRenderTargetView(m_RenderTargets[i], nullptr, rtvHandle); // on crée la render target view (= descriptor) sur ce buffer, à l'adresse que nous donne rtvHandle
+			rtvHandle.Offset(1, m_RTVDescriptorSize); // ah ! voilà m_RTVDescriptorSize ! Il correspond à la taille d'un descripteur de RTV, on va donc utiliser offset pour qu'à la prochaine itération de la boucle on crée la render target view suivante dans la heap.
+		}
+	</pre>
+	<p>On a fini d'initialiser >':O ? Oui, presque !  On va juste créer un CommandAllocator. C'est très simple à faire : ]</p>
+	<pre class="prettyprint linenums">
+		ThrowIfFailed(m_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+			IID_PPV_ARGS(&m_CommandAllocator)));
+	</pre>
+	<p>On utilise une command list directe, la suite des paramètres, vous connaissez ;)</p>
+	<p>C'est quoi ce CommandAllocator ?</p>
+	<p>Quand les commandes sont enregistrées par la CommandList, elles sont en fait stockées en mémoire dans le CommandAllocator correspondant, et quand une CommandList sera executée, la CommandQueue référencera les commandes qui sont dans le CommandAllocator !</p>
+
+	<p>On va s'arrêter là, on a (pour l'instant) fini d'initialiser D3D12, vous pouvez compiler le code sans problème. N'oubliez pas les désallocations de mémoire dans le destructeur ;) (->Release ou macro SAFE_RELEASE pour les COM objects).</p>
+</div>
+<div>
+	<p>Références :</p>
+	<ul>
+		<li>DXGI : <a href="https://msdn.microsoft.com/fr-fr/library/windows/desktop/ff471322(v=vs.85).aspx">https://msdn.microsoft.com/fr-fr/library/windows/desktop/ff471322(v=vs.85).aspx</a></li>
+	</ul>
+</div>
+<p class="centered"><br>Cours précédent : <a href="project_config.html">Configuration du projet</a> - Prochain cours : <a href="pipeline_init.html">Initialisation du pipeline</a></p>
+</body>
+</html>
